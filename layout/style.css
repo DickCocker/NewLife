@@ -1,0 +1,50 @@
+@font-face {
+    font-family: Oswald;
+    font-weight: semibold;
+    src: url("../src_global/Oswald/Oswald-SemiBold.ttf");
+}
+@font-face {
+    font-family: Noto_Sans;
+    src: url("../src_global/Noto_Sans/NotoSans-Regular.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Oswald;
+    font-weight: semibold;
+}
+button, input[type="checkbox"] {
+    cursor: pointer;
+}
+header {
+    height: 55px;
+    padding-top: 3px;
+    margin-bottom: 80px;
+}
+header nav {
+    width: fit-content;
+    margin-inline: auto;
+    height: inherit;
+    display: flex;
+}
+header nav * {
+    margin-block: auto;
+    display: inline;
+}
+header nav h1 {
+    font-size: 2.3em;
+    margin-inline: 120px;
+}
+header nav a, header nav .empty {
+    margin-inline: 60px;
+}
+header nav a img, header nav .empty {
+    height: 2.5em;
+    width: 2.5em;
+}
+
+section {
+    min-height: calc(100vh - 138px);
+    margin-inline: 3%;
+}

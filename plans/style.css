@@ -1,0 +1,112 @@
+@media (min-width: 1240px) {
+    :root {
+        --grid_cols: repeat(10, 1fr);
+        --grid_rows: repeat(10, 10%);
+        --today_col: 1/6;
+        --today_row: 1/5;
+        --non-period_col: 8/11;
+        --non-period_row: 1/10;
+        --calendar_col: 1/8;
+        --calendar_row: 6/10;
+        --tomorrow_col: 6/8;
+        --tomorrow_row: 1/5;
+        --div_margin: 0;
+    }
+}
+@media (max-width: 1240px) {
+    :root {
+        --count-cols: unset;
+        --count-rows: unset;
+        --today_col: unset;
+        --today_row: unset;
+        --non-period_col: unset;
+        --non-period_row: unset;
+        --calendar_col: unset;
+        --calendar_row: unset;
+        --tomorrow_col: unset;
+        --tomorrow_row: unset;
+        --div_margin: 20px;
+    }
+}
+
+section {
+    display: grid;
+    grid-template-columns: var(--grid_cols);
+    grid-template-rows: var(--grid_rows);
+    column-gap: 3%;
+}
+section > div {
+    margin-bottom: var(--div_margin);
+    background-color: rgb(214, 214, 214);
+    border-radius: 10px;
+    overflow: hidden;
+}
+#today {
+    grid-column: var(--today_col);
+    grid-row: var(--today_row);
+}
+#non-period {
+    grid-column: var(--non-period_col);
+    grid-row: var(--non-period_row);
+}
+#calendar {
+    grid-column: var(--calendar_col);
+    grid-row: var(--calendar_row);
+}
+#tomorrow {
+    grid-column: var(--tomorrow_col);
+    grid-row: var(--tomorrow_row);
+}
+section > div > .head {
+    background-color: rgb(182, 182, 182);
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+section > div ul {
+    margin-top: 1.5em;
+    margin-inline: 1em;
+}
+section > div ul li {
+    list-style: none;
+    margin-block: 0.5em;
+}
+section > div ul li * {
+    display: inline-block;
+    font-family: Noto_Sans;
+}
+section > div:not(#calendar) ul p {
+    width: calc(97% - 4.2em);
+}
+section > div:not(#calendar) ul li:not(.add) button {
+    width: 1.8em;
+    height: 1.8em;
+    background: none;
+    border: none;
+}
+section > div:not(#calendar) input[type="text"] {
+    margin-top: 1em;
+    margin-right: 1em;
+    width: calc(100% - 2.8em);
+    font-size: 1em;
+    background-color: rgb(228, 228, 228);
+    border: none;
+}
+section > div:not(#calendar) ul li.add button {
+    width: 1.8em;
+    height: 1.8em;
+    background: none;
+    border: none;
+}
+section > div:not(#calendar) ul button img {
+    width: inherit;
+    height: inherit;
+}
+section > div:not(#calendar) li input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+    margin-right: 1em;
+}
+section > div:not(#calendar) li input:checked ~ p {
+    color: rgb(114, 114, 114);
+    text-decoration: line-through;
+}
