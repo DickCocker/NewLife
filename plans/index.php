@@ -20,41 +20,6 @@ if ($sql) {
         ['id' => 'calendar', 'head' => 'календарь'],
         ['id' => 'tomorrow', 'head' => 'завтра']
     ];
-    foreach($_COOKIE as $key => $value) {
-        $operation = mb_substr($key, 0, mb_strpos($key, '_'));
-        switch ($operation) {
-            case 'add':
-                $belonging = mb_substr($key,  mb_strpos($key, '_')+1);
-                $belonging = mb_substr($belonging, 0, mb_strpos($belonging, '_'));
-                $in_array = FALSE;
-                foreach($divs as $div) {
-                    if (in_array($belonging, $div)) {
-                        $in_array = TRUE;
-                        break;
-                    }
-                }
-                if ($in_array) {
-                    $sql_request = "INSERT INTO `plans` (`id`, `text`, `checked`, `date`) VALUES (NULL, '$value', '0', '$date');";
-                }
-                break;
-            case 'del':
-                $sql_request = "DELETE FROM plans WHERE `plans`.`id` = $value";
-                break;
-            case 'check':
-                $id = mb_substr($key, mb_strpos($key, '_')+1);
-                if ($value == 'true') {
-                    $status = 1;
-                }
-                else {
-                    $status = 0;
-                }
-                    $sql_request = "UPDATE `plans` SET `checked` = '$status' WHERE `plans`.`id` = $id;";
-                break;
-        }
-        if ($sql -> query($sql_request)) {
-            setcookie($key, '');
-        }
-    }
 
     foreach ($divs as $div) {
         echo "
@@ -106,7 +71,7 @@ if ($sql) {
                         }
                     }
                 }
-                echo "<li class='add'> <input type='text' placeholder='новая задача'> <button class='add' onclick='add(\"$div[id]\", \"$p_id\")'> <img src='../$p_id/src/add.svg' alt='add'> </button> </li>";
+                echo "<li class='add'> <input type='text' placeholder='новая задача'> <button class='add' onclick='add(\"$div[id]\")'> <img src='../$p_id/src/add.svg' alt='add'> </button> </li>";
                 echo '</ul>';
             }
             else {
@@ -127,22 +92,81 @@ if ($sql) {
                 $month = date('m');
             }
             $date = "$year-$month-%";
-            $query_result = mysqli_query($sql, "SELECT id, text, date, checked FROM plans WHERE date LIKE '$date'");
+            $query_result = mysqli_query($sql, "SELECT * FROM plans WHERE date LIKE '$date'");
             if ($query_result) {
                 for ($data = []; $row = mysqli_fetch_assoc($query_result); $data[] = $row);
                 unset($query_result);
-                #var_dump($data);
+                $count_rows = 10;
+                $count_days = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
                 echo '<table>';
-                foreach (range(1, 10) as $row) {
-                    echo '<tr>';
-                    foreach (range(1, cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))) as $day) {
-                        echo '<td>';
-                        
+                foreach (range(1, $count_rows) as $row) {
+                    echo "<tr style='height: calc(100% / $count_rows)'>";
+                    foreach (range(1, $count_days) as $day) {
+                        $day = str_pad($day, 2, '0', STR_PAD_LEFT);
+                        $date = "$year-$month-$day";
+                        foreach ($data as $key => $value) {
+                            if ($value['date'] == $date) {
+                                $target = $value;
+                                unset($data[$key]);
+                                break;
+                            }
+                        }
+                        if ($target) {
+                            echo "<td id='$target[id]' onclick='calendar_change_set(\"$target[id]\", \"$target[text]\", $target[checked], $target[deadline], \"$target[date]\", \"$target[icon]\")' style='width: calc(100% / $count_days)'>";
+                            if ($target['icon']) {
+                                echo "<img src='../src_global/emoji/$target[icon]'>";
+                            }
+                            else {
+                                echo "<img src='./src/point.svg'>";
+                            }
+                        }                  
+                        else {
+                            echo "<td class='empty' onclick='calendar_add_set(\"$target[date]\")' style='width: calc(100% / $count_days)'>";
+                        }
                         echo '</td>';
+                        unset($target);
                     }
                     echo '</tr>';
                 }
                 echo '</table>';
+?>
+<div class="body_shadow hidden">
+    <div id="calendar_window">
+        <div class="head">
+            <div class="empty"></div>
+            <h2></h2>
+            <button id='close' onclick="calendar_window_close()"></button>
+        </div>
+        <textarea placeholder="Текст задачи"></textarea>
+        <div id="options">
+            <div id="left">
+                <div id="top">
+                    <div id="check">
+                        <p> выполнено? </p>
+                        <input type="checkbox">
+                    </div>
+                    <div id="deadline">
+                        <p> дэдлайн? </p>
+                        <input type="checkbox">
+                    </div>
+                </div>
+                <div id="date">
+                    <p> дата: </p>
+                    <input type="date">
+                </div>
+            </div>
+            <div id="right">
+                <?= emoji($target['icon']) ?>
+                <div id="save-cancel">
+                    <button id="del" onclick="calendar_window_del()"> удалить </button>
+                    <button id="save" onclick="calendar_window_save()"> сохранить </button>
+                    <button onclick="calendar_window_close()"> отменить </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
             }
             else {
                 echo '<p> Не удалось извлечь данные из базы данных, приносим свои извенения! </p>';
@@ -154,7 +178,6 @@ if ($sql) {
 else {
     echo 'Не можем связаться с базой данных :(';
 }
-var_dump($_COOKIE);
 
 layout_end($p_id);
 ?>

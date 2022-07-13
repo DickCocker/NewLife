@@ -11,6 +11,8 @@
         --tomorrow_col: 6/8;
         --tomorrow_row: 1/5;
         --div_margin: 0;
+        --calendar-window_w: 40vw;
+        --calendar-window_h: 40vh;
     }
 }
 @media (max-width: 1240px) {
@@ -57,12 +59,12 @@ section > div {
     grid-column: var(--tomorrow_col);
     grid-row: var(--tomorrow_row);
 }
-section > div > .head {
+section > div .head {
     background-color: rgb(182, 182, 182);
     text-align: center;
     color: rgb(255, 255, 255);
 }
-section > div ul {
+section > div:not(#calendar) ul {
     margin-top: 1.5em;
     margin-inline: 1em;
 }
@@ -73,13 +75,14 @@ section > div ul li {
 section > div ul li * {
     display: inline-block;
     font-family: Noto_Sans;
+    font-weight: normal;
 }
 section > div:not(#calendar) ul p {
-    width: calc(97% - 4.2em);
+    width: calc(97% - 3.4em);
 }
 section > div:not(#calendar) ul li:not(.add) button {
-    width: 1.8em;
-    height: 1.8em;
+    width: 1.6em;
+    height: 1.6em;
     background: none;
     border: none;
 }
@@ -109,4 +112,98 @@ section > div:not(#calendar) li input[type="checkbox"] {
 section > div:not(#calendar) li input:checked ~ p {
     color: rgb(114, 114, 114);
     text-decoration: line-through;
+}
+
+#calendar table {
+    width: 100%;
+    height: calc(100% - 6em);
+    border-collapse: collapse;
+}
+#calendar table tr {
+    height: inherit;
+}
+#calendar table td + td {
+    border-left: 1px solid;
+}
+#calendar table td {
+    text-align: center;
+}
+#calendar table td:hover {
+    background-color: rgb(161, 161, 161);
+    cursor: pointer;
+}
+#calendar table td * {
+    height: 50%;
+    width: 50%;
+    text-align: center;
+}
+#calendar_window {
+    width: var(--calendar-window_w);
+    height: var(--calendar-window_h);
+    position: fixed;
+    left: calc((100vw - var(--calendar-window_w)) / 2);
+    top: calc((100vh - var(--calendar-window_h)) / 2);
+    background-color: rgb(214, 214, 214);
+    border-radius: 10px;
+    overflow: hidden;
+}
+#calendar_window .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#calendar_window .head button#close {
+    width: 1.7em;
+    height: 1.7em;
+    margin-right: 0.7em;
+    background-color: inherit;
+    border: none;
+    background-image: url(./src/delete.svg);
+}
+#calendar_window textarea {
+    width: 90%;
+    height: 45%;
+    margin-inline: 5%;
+    margin-block: 3%;
+    padding-left: 1em;
+    padding-right: 0.5em;
+    padding-top: 0.5em;
+    box-sizing: border-box;
+    resize: none;
+    font-family: Noto_Sans;
+    font-size: larger;
+}
+#calendar_window #options {
+    height: 30%;
+    margin-inline: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+#calendar_window #options #left {
+    width: 50%;
+}
+#calendar_window #options #top {
+    margin-bottom: 2em;
+    display: flex;
+    justify-content: space-between;
+}
+#calendar_window #options #top div * {
+    display: inline;
+}
+#calendar_window #options #top div p {
+    margin-right: 0.5em;
+}
+#calendar_window #options #date {
+    display: flex;
+    justify-content: space-between;
+}
+#calendar_window #options #right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+#calendar_window #options #right #emoji_button {
+    width: 4em;
+    height: 4em;
+    align-self:flex-end;
 }

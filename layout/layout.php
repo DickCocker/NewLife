@@ -83,6 +83,7 @@ function layout_end ($p_id) {
     <footer>
 
     </footer>
+    <script src="../layout/script.js"></script>
 <?php
 if ($p_id == 'home') {
     $js_list = glob("$root/*.js");
@@ -105,5 +106,49 @@ if (isset($js_list)) {
 </body>
 </html>
 <?php
+}
+
+function emoji ($inpt_emoji = FALSE) {
+    global $root;
+    $emoji_groups = [
+        'animals_and_nature' => 'животные и растения',
+        'flags' => 'флаги',
+        'food_and_drink' => 'еда и напитки',
+        'objects' => 'предметы',
+        'people' => 'люди',
+        'smileys' => 'эмоции',
+        'symbols' => 'символы',
+        'travel_and_places' => 'путешествия',
+    ];
+    echo "<div id='emoji'>";
+    if ($inpt_emoji) {
+        echo "<img src='../src_global/emoji/$inpt_emoji' id='emoji_button' data-icon='$inpt_emoji'>";
+    }
+    else {
+        echo "<img src='../src_global/emoji.svg' id='emoji_button' data-icon='$inpt_emoji'>";
+    }
+    echo '<div class="hidden">';
+    echo "<ul>";
+    foreach (scandir("$root/src_global/emoji/") as $emoji_dir) {
+        if ($emoji_dir != '.' and $emoji_dir != '..') {
+            if (isset($emoji_groups[$emoji_dir])) {
+                $group_title = $emoji_groups[$emoji_dir];
+            }
+            else {
+                $group_title = $emoji_dir;
+            }
+            echo "
+            <li onclick='emoji_select_group(this, \"$emoji_dir\")'>
+                <p> $group_title </p>
+            </li>
+            ";
+        }
+    }
+    echo "
+            </ul>
+            <div id='emoji_list'></div>
+        </div>
+    </div>
+    ";
 }
 ?>

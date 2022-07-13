@@ -1,11 +1,17 @@
 @font-face {
     font-family: Oswald;
-    font-weight: semibold;
+    font-weight: bolder;
     src: url("../src_global/Oswald/Oswald-SemiBold.ttf");
 }
 @font-face {
     font-family: Noto_Sans;
+    font-weight: normal;
     src: url("../src_global/Noto_Sans/NotoSans-Regular.ttf");
+}
+@font-face {
+    font-family: Noto_Sans;
+    font-weight: bolder;
+    src: url("../src_global/Noto_Sans/NotoSans-SemiBold.ttf");
 }
 
 * {
@@ -47,4 +53,69 @@ header nav a img, header nav .empty {
 section {
     min-height: calc(100vh - 138px);
     margin-inline: 3%;
+}
+
+.body_shadow {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(2px);
+}
+.hidden {
+    display: none;
+}
+.li_selected {
+    background-color: rgb(216, 216, 216);
+    color: black;
+}
+
+#emoji:not(:hover) {
+    width: 2em;
+}
+#emoji > div {
+    width: 35em;
+    height: 20em;
+    position: fixed;
+    background-color: white;
+    border: 2px solid gray;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#emoji:hover > div {
+    display: flex;
+}
+#emoji ul {
+    width: fit-content;
+    border-right: 2px solid gray;
+}
+#emoji ul li {
+    padding-left: 1em;
+    padding-right: 2em;
+    list-style: none;
+}
+#emoji ul li:not(.li_selected) {
+    color: rgb(104, 104, 104);
+}
+#emoji ul li p {
+    font-family: Noto_Sans;
+    font-weight: bolder;
+    color: inherit;
+}
+#emoji ul li:hover {
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
+#emoji > div div {
+    overflow: auto;
+}
+#emoji > div img {
+    width: 2em;
+    height: 2em;
+}
+#emoji > div img:hover {
+    background-color: rgb(212, 212, 212);
+    cursor: pointer;
 }
